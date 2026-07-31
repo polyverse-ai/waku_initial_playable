@@ -1,0 +1,109 @@
+Polyverse Playable Template — Partner Source-Available License
+
+Copyright (c) Polyverse Entertainment Inc. All rights reserved.
+
+This software and the accompanying files (the "Template") are the proprietary
+and confidential property of Polyverse Entertainment Inc. ("Polyverse"). The
+Template is made available in source form for reference and development use
+only. It is NOT open-source software, and no rights are granted except those
+expressly stated below.
+
+1. DEFINITIONS
+
+   "Partner" means a person or entity that has entered into, and remains in
+   good standing under, a written partnership, development, or content
+   agreement with Polyverse (the "Partner Agreement").
+
+   "Waku Platform" means the Polyverse content platform and its associated
+   applications, runtimes, and services.
+
+   "Playable" means interactive content created by a Partner for distribution
+   on and execution within the Waku Platform.
+
+2. GRANT OF LICENSE
+
+   Subject to a Partner's continued compliance with this license and with the
+   Partner Agreement, Polyverse grants that Partner a limited, non-exclusive,
+   non-transferable, non-sublicensable, revocable license to:
+
+   (a) view, reproduce, and internally distribute the Template within the
+       Partner's own organization;
+
+   (b) modify the Template and create derivative works of it; and
+
+   (c) use the Template and such derivative works solely to develop, test, and
+       submit Playables for the Waku Platform.
+
+3. RESTRICTIONS
+
+   Except as expressly permitted in Section 2, the Partner shall not:
+
+   (a) redistribute, publish, sublicense, sell, rent, lease, lend, or
+       otherwise make the Template or any derivative work of it available to
+       any third party, in source or binary form;
+
+   (b) use the Template, or any part of it, for any purpose other than
+       developing content for the Waku Platform, including but not limited to
+       developing for, porting to, or interoperating with any other platform;
+
+   (c) incorporate the Template into any open-source project, or otherwise
+       place it under any license that would require its disclosure or grant
+       rights inconsistent with this license;
+
+   (d) remove, obscure, or alter any copyright, trademark, or other
+       proprietary notice contained in the Template; or
+
+   (e) reverse engineer, decompile, or disassemble any binary or minified
+       component distributed with the Template, except to the extent that such
+       restriction is prohibited by applicable law.
+
+   No trademark license is granted. "Polyverse", "Waku", and associated names
+   and logos are trademarks of Polyverse and may be used only as permitted by
+   the Partner Agreement.
+
+4. OWNERSHIP
+
+   Polyverse retains all right, title, and interest in and to the Template,
+   including all intellectual property rights. This license transfers no
+   ownership. All rights not expressly granted are reserved by Polyverse.
+
+   Content authored by the Partner is governed by the Partner Agreement, not
+   by this license.
+
+5. TERM AND TERMINATION
+
+   This license takes effect when the Partner first accesses the Template and
+   terminates automatically, without notice, upon the earlier of (a) the
+   expiration or termination of the Partner Agreement, or (b) any breach of
+   this license by the Partner. Polyverse may also terminate this license at
+   any time upon written notice. Upon termination, the Partner shall cease all
+   use of the Template and destroy all copies in its possession or control.
+   Sections 3, 4, 6, 7, and 8 survive termination.
+
+6. NO WARRANTY
+
+   THE TEMPLATE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NONINFRINGEMENT. POLYVERSE
+   DOES NOT WARRANT THAT THE TEMPLATE WILL BE ERROR-FREE OR UNINTERRUPTED, AND
+   IS UNDER NO OBLIGATION TO PROVIDE SUPPORT, UPDATES, OR MAINTENANCE.
+
+7. LIMITATION OF LIABILITY
+
+   TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL
+   POLYVERSE BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN
+   AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN
+   CONNECTION WITH THE TEMPLATE OR THE USE OF OR OTHER DEALINGS IN THE
+   TEMPLATE, INCLUDING ANY INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+   CONSEQUENTIAL DAMAGES.
+
+8. GENERAL
+
+   If any provision of this license is held unenforceable, the remaining
+   provisions remain in full force and effect. In the event of a conflict
+   between this license and the Partner Agreement, the Partner Agreement
+   controls.
+
+   If you have not entered into a Partner Agreement with Polyverse, you have
+   no license to the Template and must not use it. For licensing inquiries,
+   contact Polyverse through your existing business channel.

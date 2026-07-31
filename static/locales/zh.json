@@ -1,0 +1,15 @@
+{
+  "title": "运行时冒烟演示",
+  "core_number_label": "当前数字",
+  "result_success_kicker": "结算",
+  "result_success_title": "3",
+  "result_fail_kicker": "中断",
+  "result_fail_title": "再试一次",
+  "result_time": "用时 {seconds} 秒",
+  "action_replay": "再来一次",
+  "action_share_comment": "评论",
+  "share_comment_text": "我用 {seconds} 秒通关——你能更快吗？",
+  "share_comment_done": "已打开草稿",
+  "share_comment_unavailable": "当前环境不支持分享",
+  "hint_tap": "点击"
+}

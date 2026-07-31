@@ -1,0 +1,188 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: system-ui, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+@layer base {
+  :root {
+    --bg: oklch(13% 0.01 240);
+    --surface: oklch(20% 0.014 240);
+    --surface-strong: oklch(24% 0.018 240);
+    --line: oklch(88% 0.018 245 / 0.24);
+    --text: oklch(94% 0.012 250);
+    --muted: oklch(72% 0.018 248);
+    --accent: oklch(70% 0.12 220);
+    --accent-strong: oklch(78% 0.14 220);
+
+    --runtime-safe-top: max(
+      env(safe-area-inset-top, 0px),
+      var(--sys-top, 0px),
+      var(--gallery-safe-area-top, 0px)
+    );
+    --runtime-safe-bottom: max(
+      env(safe-area-inset-bottom, 0px),
+      var(--sys-bottom, 0px)
+    );
+    --runtime-safe-left: env(safe-area-inset-left, 0px);
+    --runtime-safe-right: env(safe-area-inset-right, 0px);
+
+    --waku-top-nav-band: 56px;
+    --waku-top-icon-bottom: 50px;
+    --waku-top-chrome: var(--waku-top-nav-band);
+    --waku-bottom-nav: 60px;
+    --waku-bottom-margin: 22px;
+    --waku-bottom-chrome: calc(var(--waku-bottom-nav) + var(--waku-bottom-margin));
+    --safe-top: calc(var(--runtime-safe-top) + var(--waku-top-chrome));
+    --safe-bottom: var(--waku-bottom-chrome);
+
+    --safe-pad: 16px;
+    --safe-pad-top: 0px;
+    --safe-pad-bottom: var(--safe-pad);
+    --safe-pad-left: var(--safe-pad);
+    --safe-pad-right: var(--safe-pad);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body,
+  #root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    overscroll-behavior: none;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: none;
+  }
+
+  /* Center the design canvas; any letterbox (off-aspect host frame) shows --bg. */
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Design canvas. Laid out at the device's full (largest-seen) viewport size and
+     scaled as ONE piece to fit the current viewport — full-screen → scale 1
+     (full-bleed, unchanged); a proportional host shrink (edit/card mode) → a
+     smaller identical copy instead of a reflow. Vars driven by
+     installViewportScale() (src/lib/viewport-scale.ts). It is also a query
+     container ("stage"): size in-canvas things relative to the stage (%, cqw/cqh,
+     @container) rather than raw vw/vh, which measures the shrunk viewport and
+     would scale twice. */
+  #root {
+    width: var(--app-w, 100vw);
+    height: var(--app-h, 100vh);
+    flex: none;
+    transform: scale(var(--app-scale, 1));
+    transform-origin: center center;
+    container: stage / size;
+  }
+
+  button {
+    font: inherit;
+  }
+
+  p,
+  h1,
+  h2,
+  h3 {
+    margin: 0;
+  }
+}
+
+@layer components {
+  /* .bg-layer: full-bleed non-interactive backdrop (texture/art). Fills the
+     viewport and may cross host top/bottom chrome. Stack: .bg-layer(0) <
+     .stage(1) < .safe-ui(2). Rendered by <BgLayer/> (src/waku/safe-area.tsx). */
+  .bg-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: var(--bg) url("./bg-texture.webp") repeat;
+    background-size: 160px 160px;
+  }
+
+  /* .stage: full-bleed interactive world layer (root for canvas/scene content).
+     Fills the viewport like .bg-layer but receives touch. Rendered by <Stage/>. */
+  .stage {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+    touch-action: none;
+  }
+
+  /* .safe-ui: safe-area UI layer (avoids host top/bottom chrome). Holds readable/
+     tappable things (HUD, buttons, copy, cards). Pass-through by default; only its
+     direct children take pointer events, so it never blocks the world beneath.
+     Rendered by <SafeUI/> (src/waku/safe-area.tsx). */
+  .safe-ui {
+    position: fixed;
+    top: calc(var(--safe-top) + var(--safe-pad-top));
+    bottom: calc(var(--safe-bottom) + var(--safe-pad-bottom));
+    left: calc(var(--runtime-safe-left) + var(--safe-pad-left));
+    right: calc(var(--runtime-safe-right) + var(--safe-pad-right));
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+  }
+
+  .safe-ui > * {
+    pointer-events: auto;
+  }
+
+  /* .safe-center: centers content within .safe-ui */
+  .safe-center {
+    flex: 1 1 auto;
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    min-height: 0;
+    place-items: center;
+    overflow: hidden;
+  }
+
+  /* The centering region must NOT swallow taps meant for the interactive world in
+     .stage beneath it — a recurring trap. `.safe-ui > *` defaults to auto, so override
+     .safe-center back to pass-through and re-enable its actual children: empty space in
+     .safe-center falls through to .stage, real UI (buttons, cards) inside stays clickable. */
+  .safe-ui > .safe-center {
+    pointer-events: none;
+  }
+
+  .safe-center > * {
+    pointer-events: auto;
+  }
+
+  /* .core-target: the floor's named primary tap target. Content that needs a
+     centered primary control anchors it here (keeps geometry a floor concern). */
+  .core-target {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    width: min(58cqw, 260px);
+    aspect-ratio: 1;
+    place-items: center;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    pointer-events: auto;
+    touch-action: manipulation;
+  }
+}

@@ -1,0 +1,391 @@
+<!doctype html>
+<!--
+  Minimal Playable — the near-blank WAKU floor (React + Tailwind). Creator content
+  starts in src/content/Content.tsx; the platform floor lives in src/waku/. Opt-in
+  demos and the reusable toolkit are parked in recipes/ (not wired into the app).
+
+    .bg-layer                    full-bleed non-interactive backdrop (texture/art); fills viewport, may cross top/bottom chrome
+    .stage                       full-bleed interactive world layer (canvas/scene); fills viewport, may cross chrome
+    .safe-ui                     read/tap UI only; safe-area layer, pass-through by default (does not clip the world)
+      .safe-center               centers content within the safe area
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"
+    />
+    <meta name="theme-color" content="#070807" />
+    <title>Minimal Playable</title>
+    <script type="application/polyverse-manifest">
+      {
+        "name": "Minimal Playable",
+        "runtime": "@polyverse/content-runtime@1",
+        "capabilities": []
+      }
+    </script>
+    <script type="application/json" id="polyverse-capability-reference" data-reference-only="true">
+{
+  "referenceOnly": true,
+  "rule": "Do not copy every capability into the live manifest. Keep capabilities empty until the page actually calls the matching SDK method.",
+  "runtimeEntrypoint": "const pv = await window.Polyverse.ready();",
+  "manifestExamples": {
+    "textChat": {
+      "capabilities": [
+        "llm.chat",
+        "multimodal.jobs.read"
+      ]
+    },
+    "visionJudge": {
+      "capabilities": [
+        "llm.chat.vision",
+        "multimodal.jobs.read"
+      ]
+    },
+    "imageGeneration": {
+      "capabilities": [
+        "multimodal.generate.image",
+        "multimodal.jobs.read",
+        "assets.read.own"
+      ]
+    },
+    "imageEdit": {
+      "capabilities": [
+        "multimodal.generate.image",
+        "multimodal.jobs.read",
+        "assets.read.own"
+      ]
+    },
+    "leaderboard": {
+      "capabilities": [
+        "leaderboard.read",
+        "leaderboard.write"
+      ]
+    },
+    "playerStorage": {
+      "capabilities": [
+        "player-storage.read",
+        "player-storage.write"
+      ]
+    },
+    "assetsUpload": {
+      "capabilities": [
+        "assets.write"
+      ]
+    },
+    "creationRemix": {
+      "capabilities": [
+        "creation.request"
+      ]
+    },
+    "hostAndApp": {
+      "capabilities": [
+        "host.context.read",
+        "app.share.request",
+        "app.navigation.request",
+        "app.haptics.play",
+        "app.composer.open"
+      ]
+    },
+    "persistentWorld": {
+      "capabilities": [
+        "datastore.read",
+        "datastore.write"
+      ]
+    },
+    "cameraPlay": {
+      "capabilities": [
+        "media.camera.capture"
+      ]
+    },
+    "motionPlay": {
+      "capabilities": [
+        "device.motion.read"
+      ]
+    },
+    "deviceAdaptive": {
+      "capabilities": [
+        "device.power.read",
+        "device.accessibility.read"
+      ]
+    }
+  },
+  "capabilities": [
+    {
+      "id": "llm.chat",
+      "useWhen": "Send text to the default runtime LLM.",
+      "sdk": "pv.llm.chat({ prompt, system, maxTokens, temperature, responseFormat })",
+      "alsoDeclare": [
+        "multimodal.jobs.read"
+      ]
+    },
+    {
+      "id": "llm.chat.vision",
+      "useWhen": "Send image or visual state to a vision-capable LLM.",
+      "sdk": "pv.llm.chat({ prompt, images, system, maxTokens, temperature, responseFormat })",
+      "alsoDeclare": [
+        "multimodal.jobs.read"
+      ]
+    },
+    {
+      "id": "multimodal.generate.image",
+      "useWhen": "Generate or edit images such as art, avatars, cards, or background assets.",
+      "sdk": "pv.image.generate({ prompt, aspectRatio, resolution, count, format }) or pv.image.edit({ prompt, images, aspectRatio, resolution, format })",
+      "alsoDeclare": [
+        "multimodal.jobs.read",
+        "assets.read.own"
+      ]
+    },
+    {
+      "id": "multimodal.generate.video",
+      "useWhen": "Generate video assets.",
+      "sdk": "pv.multimodal.generate({ capability: 'multimodal.generate.video', provider, modelId, parameters, wait })",
+      "alsoDeclare": [
+        "multimodal.jobs.read"
+      ]
+    },
+    {
+      "id": "multimodal.generate.audio",
+      "useWhen": "Generate audio assets.",
+      "sdk": "pv.multimodal.generate({ capability: 'multimodal.generate.audio', provider, modelId, parameters, wait })",
+      "alsoDeclare": [
+        "multimodal.jobs.read"
+      ]
+    },
+    {
+      "id": "multimodal.transcribe.audio",
+      "useWhen": "Transcribe uploaded or recorded audio.",
+      "sdk": "pv.multimodal.generate({ capability: 'multimodal.transcribe.audio', provider, modelId, parameters, wait })",
+      "alsoDeclare": [
+        "multimodal.jobs.read"
+      ]
+    },
+    {
+      "id": "multimodal.jobs.read",
+      "useWhen": "Poll or read multimodal job results.",
+      "sdk": "pv.multimodal.getJob({ jobId, refresh: true })"
+    },
+    {
+      "id": "multimodal.models.read",
+      "useWhen": "List models or inspect a model schema.",
+      "sdk": "pv.multimodal.searchModels(input) or pv.multimodal.getModelSchema({ modelId, provider })"
+    },
+    {
+      "id": "leaderboard.write",
+      "useWhen": "Submit a score.",
+      "sdk": "pv.leaderboard.submitScore({ score, subscore, metadata, leaderboard })"
+    },
+    {
+      "id": "leaderboard.read",
+      "useWhen": "Read top scores, own rank, or nearby ranks.",
+      "sdk": "pv.leaderboard.getTop(input), pv.leaderboard.getMyRank(input), pv.leaderboard.getAroundMe(input)"
+    },
+    {
+      "id": "player-storage.write",
+      "useWhen": "Save data, upload files, delete files, publish/unpublish, or create share tokens.",
+      "sdk": "pv.storage.save(slot, data), pv.storage.upload(blob, options), pv.storage.delete(id), pv.storage.publish(id), pv.storage.share(id)"
+    },
+    {
+      "id": "player-storage.read",
+      "useWhen": "Load saved data, list files, read published gallery files, or load shared content.",
+      "sdk": "pv.storage.load(slot), pv.storage.list(options), pv.storage.listPublished(options), pv.storage.loadShared(shareToken)"
+    },
+    {
+      "id": "host.context.read",
+      "useWhen": "Read host/user/content context.",
+      "sdk": "pv.host.context()"
+    },
+    {
+      "id": "app.share.request",
+      "useWhen": "Ask host app to open the native share flow.",
+      "sdk": "pv.app.share(input)"
+    },
+    {
+      "id": "app.navigation.request",
+      "useWhen": "Ask host app to navigate to another app surface.",
+      "sdk": "pv.app.navigate(input)"
+    },
+    {
+      "id": "app.haptics.play",
+      "useWhen": "Ask host app to play haptic feedback.",
+      "sdk": "pv.app.haptics.play({ style })"
+    },
+    {
+      "id": "app.composer.open",
+      "useWhen": "Ask host app to open composer flow.",
+      "sdk": "pv.app.openComposer(input)"
+    },
+    {
+      "id": "creation.request",
+      "useWhen": "Ask the host to open the native typed-material creation flow for this playable.",
+      "sdk": "pv.creation.open({ triggerId })"
+    },
+    {
+      "id": "assets.write",
+      "useWhen": "Upload a locally generated image (e.g. a rendered result card / canvas poster) to a permanent public URL, so it can be shared as an image comment.",
+      "sdk": "pv.assets.upload(base64, { filename, mimeType }) -> record carrying a public http(s) URL (≤20 MiB; compress large images first)"
+    },
+    {
+      "id": "app.comment.compose",
+      "useWhen": "Open a prefilled comment draft (image + text) so the player can share a result to the comments feed. The only share channel.",
+      "sdk": "pv.app.composeComment({ imageUrl, text }) — imageUrl must be a public http(s) URL (no data URLs), e.g. one returned by pv.assets.upload"
+    },
+    {
+      "id": "assets.read.own",
+      "useWhen": "Read assets the current user generated or uploaded through the platform (e.g. re-load an image produced by pv.image.generate).",
+      "sdk": "pv.assets.get({ id })"
+    },
+    {
+      "id": "datastore.read",
+      "useWhen": "Read documents from datastore collections declared for this content (shared world state, per-player docs).",
+      "sdk": "pv.data.get(collection, idOrKey), pv.data.query(collection, options), pv.data.count(collection, options)"
+    },
+    {
+      "id": "datastore.write",
+      "useWhen": "Write player documents to datastore collections declared for this content.",
+      "sdk": "pv.data.insert(collection, doc), pv.data.upsert(collection, key, doc), pv.data.update(collection, idOrKey, patch), pv.data.inc(collection, key, field, delta), pv.data.delete(collection, idOrKey)"
+    },
+    {
+      "id": "trace.write",
+      "useWhen": "Platform-internal telemetry capability. This SDK build ships a no-op stub: pv.trace.record() discards the event and pv.trace.flush() resolves as skipped, so declaring this capability has no effect. Listed only because the SDK still exposes the namespace; do not declare it.",
+      "sdk": "pv.trace.record(event) / pv.trace.flush() — both no-ops in this build"
+    },
+    {
+      "id": "host.theme.read",
+      "useWhen": "Read host theme info (e.g. light/dark) to match content styling to the app.",
+      "sdk": "pv.host.theme()"
+    },
+    {
+      "id": "host.safeArea.read",
+      "useWhen": "Read native safe-area insets when CSS env(safe-area-inset-*) is not enough.",
+      "sdk": "pv.host.safeArea()"
+    },
+    {
+      "id": "media.image.open",
+      "useWhen": "Open a generated/uploaded image full-screen so the player can save or share it.",
+      "sdk": "pv.media.openImage({ source: { kind: \"asset\", assetId }, filename })",
+      "alsoDeclare": [
+        "assets.read.own"
+      ]
+    },
+    {
+      "id": "media.photo.pick",
+      "useWhen": "Let the player pick a photo from their library through the host permission flow.",
+      "sdk": "pv.media.pickPhoto(input)"
+    },
+    {
+      "id": "media.video.pick",
+      "useWhen": "Let the player pick a video from their library through the host permission flow.",
+      "sdk": "pv.media.pickVideo(input)"
+    },
+    {
+      "id": "media.camera.capture",
+      "useWhen": "Capture a photo with the camera through the host permission flow.",
+      "sdk": "pv.media.capture(input)"
+    },
+    {
+      "id": "media.microphone.record",
+      "useWhen": "Record audio with the microphone through the host permission flow.",
+      "sdk": "pv.media.recordAudio(input)"
+    },
+    {
+      "id": "project.publish.request",
+      "useWhen": "Ask the host to publish the current project; the host must confirm with the user.",
+      "sdk": "pv.project.publish(input)"
+    },
+    {
+      "id": "project.update.request",
+      "useWhen": "Ask the host to open the host-controlled editing flow to update the current project.",
+      "sdk": "pv.project.update(input)"
+    },
+    {
+      "id": "device.battery.read",
+      "useWhen": "Read battery level and charging state (never rejects; check result.supported).",
+      "sdk": "pv.device.getBattery()"
+    },
+    {
+      "id": "device.volume.read",
+      "useWhen": "Read the device output volume (0~1) via the host bridge.",
+      "sdk": "pv.device.getVolume()"
+    },
+    {
+      "id": "device.location.read",
+      "useWhen": "Read when-in-use geolocation via the host bridge or web geolocation fallback.",
+      "sdk": "pv.device.getLocation({ accuracy })"
+    },
+    {
+      "id": "device.brightness.read",
+      "useWhen": "Read the current screen brightness.",
+      "sdk": "pv.device.getBrightness()"
+    },
+    {
+      "id": "device.brightness.write",
+      "useWhen": "Temporarily change screen brightness for this content session and restore it afterwards.",
+      "sdk": "pv.device.setBrightness({ level }), pv.device.restoreBrightness()"
+    },
+    {
+      "id": "device.volume.control.request",
+      "useWhen": "Ask the host to present a user-controlled system volume surface.",
+      "sdk": "pv.device.requestVolumeControl()"
+    },
+    {
+      "id": "device.screen.awake.request",
+      "useWhen": "Keep the screen awake while the content is actively playing.",
+      "sdk": "pv.device.setKeepAwake(input)"
+    },
+    {
+      "id": "device.orientation.read",
+      "useWhen": "Read the current interface orientation.",
+      "sdk": "pv.device.getOrientation()"
+    },
+    {
+      "id": "device.orientation.lock.request",
+      "useWhen": "Request a temporary content-scoped interface orientation lock.",
+      "sdk": "pv.device.requestOrientation(input)"
+    },
+    {
+      "id": "device.motion.read",
+      "useWhen": "Stream foreground-only motion sensor data (tilt/shake gameplay).",
+      "sdk": "pv.device.startMotion(input), pv.device.stopMotion()"
+    },
+    {
+      "id": "device.network.read",
+      "useWhen": "Read coarse network reachability and cost status (no network identifiers).",
+      "sdk": "pv.device.getNetworkStatus()"
+    },
+    {
+      "id": "device.power.read",
+      "useWhen": "Read low-power mode and thermal state to adapt content quality.",
+      "sdk": "pv.device.getPowerStatus()"
+    },
+    {
+      "id": "device.audio.route.read",
+      "useWhen": "Read the coarse active audio route (speaker vs headphones) without accessory identity.",
+      "sdk": "pv.device.getAudioRoute()"
+    },
+    {
+      "id": "device.torch.write",
+      "useWhen": "Control the torch after an explicit user gesture, scoped to this content session.",
+      "sdk": "pv.device.setTorch(input)"
+    },
+    {
+      "id": "device.clipboard.write",
+      "useWhen": "Write user-visible text to the clipboard after an explicit user gesture.",
+      "sdk": "pv.device.writeClipboard({ text })"
+    },
+    {
+      "id": "device.accessibility.read",
+      "useWhen": "Read accessibility preferences to adapt motion, contrast, and text scale.",
+      "sdk": "pv.device.getAccessibilityPreferences()"
+    }
+  ]
+}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./vendor/polyverse-content-runtime.min.js"></script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

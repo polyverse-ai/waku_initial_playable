@@ -1,0 +1,15 @@
+{
+  "title": "Runtime Smoke Demo",
+  "core_number_label": "Current number",
+  "result_success_kicker": "Result",
+  "result_success_title": "3",
+  "result_fail_kicker": "Interrupted",
+  "result_fail_title": "Try again",
+  "result_time": "{seconds}s to finish",
+  "action_replay": "Again",
+  "action_share_comment": "Comment",
+  "share_comment_text": "Finished in {seconds}s — can you beat that?",
+  "share_comment_done": "Draft opened",
+  "share_comment_unavailable": "Sharing unavailable here",
+  "hint_tap": "Tap"
+}
