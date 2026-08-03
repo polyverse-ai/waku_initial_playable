@@ -13,6 +13,7 @@ export type WakuCapability =
   | "player-storage.write"
   | "assets.write"
   | "assets.read.own"
+  | "realtime.connect"
   | "host.context.read"
   | "app.share.request"
   | "app.navigation.request"
@@ -94,7 +95,35 @@ export interface WakuPreviewStateInput {
   apply: () => void;
 }
 
+export type WakuRealtimeRoom = { kind: "quick" } | { kind: "code"; code: string };
+export type WakuRealtimeCursor =
+  | { match_id: string; seq: number }
+  | { match_id: string; frame_no: number };
+
+export interface WakuRealtimeSession {
+  readonly roomCode: string | null;
+  readonly matchId: string | null;
+  readonly state: string;
+  readonly matchState: string | null;
+  readonly cursor: WakuRealtimeCursor | null;
+  on(event: "state" | "welcome" | "record" | "error" | "restart" | "pong", listener: (value: unknown) => void): () => void;
+  send(payload: unknown, options?: { clientEventId?: string }): string;
+  sendInput(input: { targetFrame: number; inputSeq: number; payload: unknown }): void;
+  reportChecksum(input: { frameNo: number; rosterEpoch?: number; hash: string }): void;
+  ping(): void;
+  close(): void;
+}
+
 export interface WakuPlatformClient {
+  realtime?: {
+    connect(options: {
+      mode: "ordered" | "lockstep";
+      profileId: string;
+      room: WakuRealtimeRoom;
+      role?: "auto" | "player" | "spectator";
+      cursor?: WakuRealtimeCursor | null;
+    }): Promise<WakuRealtimeSession>;
+  };
   llm?: {
     chat?(request: WakuLLMChatRequest): Promise<{ text?: string; json?: unknown; job?: unknown }>;
   };

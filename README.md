@@ -103,6 +103,11 @@ const pv = await readyWakuRuntime();
 `readyWakuRuntime()` wraps the `window.Polyverse.ready()` handshake and gives you
 a typed client.
 
+For multiplayer, declare `realtime.connect`, then join an ordered or lockstep
+room with `pv.realtime.connect({ mode, profileId, room })`. The platform owns
+identity, tickets, room membership, ordering, and reconnect; the playable owns
+its game rules and rendering.
+
 ## Publishing
 
 Publishing instructions are provided with your partner onboarding.
