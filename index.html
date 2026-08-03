@@ -252,6 +252,11 @@
       "sdk": "pv.trace.record(event) / pv.trace.flush() — both no-ops in this build"
     },
     {
+      "id": "realtime.connect",
+      "useWhen": "Join a platform-managed multiplayer room using ordered events or deterministic lockstep frames.",
+      "sdk": "pv.realtime.connect({ mode, profileId, room: { kind: \"quick\" | \"code\" } })"
+    },
+    {
       "id": "host.theme.read",
       "useWhen": "Read host theme info (e.g. light/dark) to match content styling to the app.",
       "sdk": "pv.host.theme()"
