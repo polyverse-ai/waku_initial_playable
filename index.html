@@ -85,7 +85,8 @@
         "app.share.request",
         "app.navigation.request",
         "app.haptics.play",
-        "app.composer.open"
+        "app.composer.open",
+        "app.invite"
       ]
     },
     "persistentWorld": {
@@ -215,6 +216,11 @@
       "id": "app.composer.open",
       "useWhen": "Ask host app to open composer flow.",
       "sdk": "pv.app.openComposer(input)"
+    },
+    {
+      "id": "app.invite",
+      "useWhen": "Invite friends into this run: host share panel carries a launch context (e.g. a room code) that reaches the receiver as pv.launchContext. Manifest-declared only, never default.",
+      "sdk": "pv.app.invite({ ctx, title })"
     },
     {
       "id": "creation.request",
