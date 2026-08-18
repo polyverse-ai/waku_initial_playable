@@ -193,6 +193,16 @@
       "sdk": "pv.storage.load(slot), pv.storage.list(options), pv.storage.listPublished(options), pv.storage.loadShared(shareToken)"
     },
     {
+      "id": "saves.write",
+      "useWhen": "Write a structured progress snapshot. Each slot keeps only the latest row, so save replaces the whole row and any optional field you omit falls back to its default; delete returns { deleted: false } rather than an error when the slot was already absent.",
+      "sdk": "pv.saves.save(slot, payload, { title, progress, saveVersion }), pv.saves.delete(slot)"
+    },
+    {
+      "id": "saves.read",
+      "useWhen": "Read save points. load returns the full row including payload and rejects with save_point_not_found when the slot is empty; list returns slot metadata only and never carries the payload.",
+      "sdk": "pv.saves.load(slot), pv.saves.list()"
+    },
+    {
       "id": "host.context.read",
       "useWhen": "Read host/user/content context.",
       "sdk": "pv.host.context()"
@@ -263,6 +273,16 @@
       "sdk": "pv.realtime.connect({ mode, profileId, room: { kind: \"quick\" | \"code\" } })"
     },
     {
+      "id": "server.invoke",
+      "useWhen": "Call a named handler exported by this playable's server/main.js bundle.",
+      "sdk": "pv.server.call(fn, args, { idempotencyKey, timeoutMs })"
+    },
+    {
+      "id": "credits.charge",
+      "useWhen": "Charge the player's real credits for a transaction. The host shows a native confirm dialog first: cancelling rejects with charge_cancelled and an insufficient balance rejects with insufficient_credit having deducted nothing. Pass idempotencyKey so retrying the same action cannot double-charge. Manifest-declared only, never granted by default.",
+      "sdk": "pv.credits.charge({ amount, reason, idempotencyKey }), pv.credits.preflight({ amount })"
+    },
+    {
       "id": "host.theme.read",
       "useWhen": "Read host theme info (e.g. light/dark) to match content styling to the app.",
       "sdk": "pv.host.theme()"
@@ -274,8 +294,16 @@
     },
     {
       "id": "media.image.open",
-      "useWhen": "Open a generated/uploaded image full-screen so the player can save or share it.",
-      "sdk": "pv.media.openImage({ source: { kind: \"asset\", assetId }, filename })",
+      "useWhen": "Open a generated/uploaded image full-screen so the player can save or share it. The multi-image viewer (1..10 images) reuses this same grant, so paging through a set needs no extra capability.",
+      "sdk": "pv.media.openImage({ source: { kind: \"asset\", assetId }, filename }), pv.media.openGallery({ items, initialIndex })",
+      "alsoDeclare": [
+        "assets.read.own"
+      ]
+    },
+    {
+      "id": "media.video.open",
+      "useWhen": "Open an owned video full-screen so the player can watch or save it. This is a separate opt-in: the image viewer grant does not cover video.",
+      "sdk": "pv.media.openVideo({ source: { kind: \"asset\", assetId }, filename })",
       "alsoDeclare": [
         "assets.read.own"
       ]
