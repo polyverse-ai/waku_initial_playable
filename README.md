@@ -82,8 +82,20 @@ it into the manifest.
 Rules:
 
 - **Declare only what you actually call.** An empty array is the correct
-  starting point, and it still gets the platform's default capability set — you
-  do not need to declare anything to build a working playable.
+  starting point: it grants the **free default set** — the platform's default
+  set minus every paid capability. Save points, player files, leaderboards and
+  comment composing all work with an empty manifest.
+- **Paid capabilities are never granted by an empty manifest.** They cost real
+  money on every call, so the platform grants them only when the manifest names
+  them: `llm.chat`, `llm.chat.vision`, `multimodal.generate.image`,
+  `multimodal.generate.video`, `multimodal.generate.audio`,
+  `multimodal.transcribe.audio`, `assets.write`, the realtime model streams
+  (`realtime.tts`, `realtime.image`, `realtime.voice`), and `server.invoke`.
+  Calling one you did not declare fails with `403 capability_denied` — an empty
+  array is **not** enough for, say, `pv.llm.chat`.
+- **A non-empty array replaces the set; it does not add to it.** The moment the
+  array is non-empty you get exactly what you listed and nothing more — the free
+  defaults are gone too, so list the free capabilities you still call as well.
 - Add a capability the moment your code calls the matching SDK method, and not
   before.
 - A capability id that is not in the reference will fail `npm test`.
@@ -110,7 +122,45 @@ its game rules and rendering.
 
 ## Publishing
 
-Publishing instructions are provided with your partner onboarding.
+Publishing goes through the `wakukit` CLI. Build first — `publish` uploads bytes
+and never builds for you — then run these three steps from the project root:
+
+```bash
+# 1. build into public/
+npm run build
+
+# 2. read-only check: can this project run as a playable?
+wakukit doctor .
+
+# 3. first publish — private, so only you can see it
+wakukit publish --name "My Playable" \
+  --site-dir ./public --source-dir . --visibility private
+```
+
+`--visibility private` on the first publish is deliberate. A private playable is
+one you can create the first release for yourself (`wakukit promote`), which is
+what a playable with a `server/` backend needs before its backend calls will run
+at all. Publish it public straight away and that first release is not yours to
+make. Keep the `project_id` the receipt prints — you need it to republish this
+same playable rather than create a second one.
+
+When your own testing passes, republish it as public:
+
+```bash
+npm run build
+wakukit publish --project-id <project_id> \
+  --site-dir ./public --source-dir . --visibility public
+```
+
+Visibility is the only thing `--visibility` changes, and omitting it keeps
+whatever the playable has now — republishing never flips visibility on its own.
+Going public makes the playable eligible for the public feed; it appears there
+once platform review has passed.
+
+Installing `wakukit`, and getting a playable onto the public feed for the first
+time, are covered by the instructions that come with your partner delivery.
+`wakukit --help` lists every command; `wakukit <command> --help` is the source of
+truth for its options.
 
 ## License
 
