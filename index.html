@@ -273,6 +273,21 @@
       "sdk": "pv.realtime.connect({ mode, profileId, room: { kind: \"quick\" | \"code\" } })"
     },
     {
+      "id": "realtime.tts",
+      "useWhen": "Stream text-to-speech from a model in real time. This is model realtime (player to model), not the multiplayer realtime above. Paid and never granted by default: billed per submitted character, manifest-declared only, and the call must happen inside a user gesture. Guests are rejected as login_required so the host can prompt for sign-in.",
+      "sdk": "pv.speech.stream({ profileId, autoplay })"
+    },
+    {
+      "id": "realtime.image",
+      "useWhen": "Stream generated image frames from a model in real time, e.g. re-rendering while the player edits a prompt. Paid and never granted by default: billed per produced frame (frames dropped by coalescing are not billed), manifest-declared only, and the call must happen inside a user gesture.",
+      "sdk": "pv.image.stream({ profileId })"
+    },
+    {
+      "id": "realtime.voice",
+      "useWhen": "Open an end-to-end voice session with a model: microphone in, speech out. Paid and never granted by default, and billed per wall-clock session second whether or not anyone is talking, so close the session as soon as it goes idle. Manifest-declared only, and the call must happen inside a user gesture.",
+      "sdk": "pv.voice.connect({ profileId, mic, autoplay })"
+    },
+    {
       "id": "server.invoke",
       "useWhen": "Call a named handler exported by this playable's server/main.js bundle.",
       "sdk": "pv.server.call(fn, args, { idempotencyKey, timeoutMs })"
@@ -327,6 +342,16 @@
       "id": "media.microphone.record",
       "useWhen": "Record audio with the microphone through the host permission flow.",
       "sdk": "pv.media.recordAudio(input)"
+    },
+    {
+      "id": "media.audio.pick",
+      "useWhen": "Let the player pick an existing audio file through the host permission flow. iOS has no system audio library, so the host opens the footage panel or Files; the web fallback is a plain audio file input. Android does not implement it yet and reports supported: false.",
+      "sdk": "pv.media.pickAudio(input)"
+    },
+    {
+      "id": "memory.write",
+      "useWhen": "Submit one memory (text, or a data:image/... payload) to the player's cross-content memory library. Write-only by design: content can submit but can never read or enumerate memories, and the host asks the user before saving. Only the iOS host implements it today; elsewhere the call rejects as invalid_request, so treat it as an enhancement and never gate core gameplay on it.",
+      "sdk": "pv.memory.save(\"some text\") or pv.memory.save({ content, mediaType, tags })"
     },
     {
       "id": "project.publish.request",
