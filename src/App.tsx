@@ -21,7 +21,7 @@ export function App() {
   return (
     <>
       <BgLayer />
-      <Stage active={running}>
+      <Stage active={running} lifecycle={lifecycle}>
         <Content active={running} />
       </Stage>
       {/* Safe-area layer for readable/tappable UI (HUD, buttons). Empty by
