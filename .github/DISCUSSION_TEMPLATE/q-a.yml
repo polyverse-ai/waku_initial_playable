@@ -1,0 +1,68 @@
+# Discussion form for the Q&A category.
+# GitHub picks it up by file name: `.github/DISCUSSION_TEMPLATE/<category slug>.yml`,
+# and the Q&A category's slug is `q-a`. It only takes effect on the default branch.
+# Docs: https://docs.github.com/en/discussions/managing-discussions-for-your-community/creating-discussion-category-forms
+title: "[求助] 一句话说明卡在哪 / [Help] One line on what went wrong"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        先看新手入门指南第 7 节「卡住了怎么办」（[中文](https://storage.googleapis.com/polyverse-wakukit-releases/docs/wakukit-getting-started.zh.md)），常见报错那里有现成答案；没解决再往下填，每一格都原样粘贴，不要只截一句报错。
+        Check section 7 "If you get stuck" of the getting-started guide first ([English](https://storage.googleapis.com/polyverse-wakukit-releases/docs/wakukit-getting-started.en.md)); the common errors are answered there. If that does not solve it, fill in the form below — paste each item as is, not just the one error line.
+  - type: input
+    id: wakukit-version
+    attributes:
+      label: "wakukit --version 的输出 / Output of wakukit --version"
+      description: |
+        在终端里运行 `wakukit --version`，把打印出来的那一行原样贴进来。
+        Run `wakukit --version` in a terminal and paste the printed line as is.
+      placeholder: "0.7.70"
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: "你的系统 / Your operating system"
+      description: |
+        你在哪种电脑上运行 wakukit。
+        The computer you run wakukit on.
+      options:
+        - macOS
+        - Linux
+        - 其它 / Other
+  - type: textarea
+    id: command
+    attributes:
+      label: "你运行的命令 / The command you ran"
+      description: |
+        完整的一条（或几条）命令，含全部参数。
+        The full command line(s), with every argument.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: "完整输出 / Full output"
+      description: |
+        从回车开始到命令结束打印出来的全部内容，不要只截一句报错。
+        Everything printed from the moment you pressed Return until the command ended — not just the one error line.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: doctor
+    attributes:
+      label: "wakukit doctor . 的结论（选填）/ Verdict of wakukit doctor . (optional)"
+      description: |
+        在项目文件夹里运行 `wakukit doctor .`，贴上它最后给出的结论。
+        Run `wakukit doctor .` inside the project folder and paste its final verdict.
+      render: text
+  - type: input
+    id: guide-step
+    attributes:
+      label: "卡在指南的哪一步（选填）/ Which step of the guide (optional)"
+      description: |
+        新手入门指南里的小节号，例如 5.2。
+        The section number in the getting-started guide, e.g. 5.2.
+      placeholder: "5.2"
