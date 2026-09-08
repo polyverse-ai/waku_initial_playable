@@ -25,6 +25,7 @@ wakukit promote                                        # no argument inside this
                                                        # (wakukit < 0.7.69: pass the name, `wakukit promote "<name>"`)
                                                        # your first release — still private, only you can open it
 npm run build && wakukit publish --visibility public   # run in this folder = same playable, now public
+wakukit promote                                        # again: the public snapshot is frozen until you point it at this version
 ```
 
 ## Hard rules
