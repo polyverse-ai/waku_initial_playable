@@ -27,12 +27,28 @@ layout, zero-size canvas, uncaught page errors, a stuck state machine). It needs
 [Playwright](https://playwright.dev) installed; if Playwright is not available
 it skips that stage and exits cleanly rather than failing.
 
+## Working with an AI assistant
+
+The project ships `CLAUDE.md` and `AGENTS.md`; Claude Code and Codex read
+them on startup, so an assistant launched in this folder already knows it is
+building a Waku playable, where the code goes, and how to preview and publish
+it. Install `wakukit` first (the CLI plus the `wakukit` skill the assistant
+follows):
+
+```bash
+curl -fsSL https://storage.googleapis.com/polyverse-wakukit-releases/install-wakukit.sh | bash
+```
+
+Then just say what you want to make — "make a balloon-popping game" is enough;
+the assistant does not need the platform explained.
+
 ## Layout
 
 | Path                 | What it is                                                                                                                  |
 | -------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | `src/content/Content.tsx` | **Your starting point.** The near-blank content surface — write your playable here.                                     |
 | `src/waku/`          | Platform floor: runtime handshake, host lifecycle, safe-area/z-layer primitives, audio lifecycle. **Don't edit.** Import from `src/waku` only. |
+| `src/lib/`           | Shell helpers: uniform viewport scaling for the host's shrunk card/edit frames (`viewport-scale.ts`, wired in `main.tsx`) and an opt-in media preloader (`preload.ts`, not imported by default). |
 | `src/App.tsx`, `src/main.tsx`, `src/index.css` | App shell and the platform layer classes. Edit sparingly.                                                 |
 | `recipes/`           | Optional, unwired reference material — an example playable and a reusable toolkit. Nothing here is imported by the app; copy or import what you need, delete what you don't. |
 | `static/`            | Copied verbatim into the build output. Holds `static/vendor/` and `static/locales/`.                                        |
@@ -157,8 +173,7 @@ whatever the playable has now — republishing never flips visibility on its own
 Going public makes the playable eligible for the public feed; it appears there
 once platform review has passed.
 
-Installing `wakukit`, and getting a playable onto the public feed for the first
-time, are covered by the instructions that come with your partner delivery.
+Installing `wakukit` is covered in [Working with an AI assistant](#working-with-an-ai-assistant).
 `wakukit --help` lists every command; `wakukit <command> --help` is the source of
 truth for its options.
 
