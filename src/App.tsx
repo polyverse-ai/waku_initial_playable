@@ -21,16 +21,13 @@ export function App() {
   return (
     <>
       <BgLayer />
-      <Stage active={running}>
+      <Stage active={running} lifecycle={lifecycle}>
         <Content active={running} />
       </Stage>
-      <SafeUI lifecycle={lifecycle}>
-        <section className="safe-center">
-          <h1 className="text-sm font-semibold tracking-[0.18em] text-[var(--muted)]">
-            Minimal Playable
-          </h1>
-        </section>
-      </SafeUI>
+      {/* Safe-area layer for readable/tappable UI (HUD, buttons). Empty by
+          default: the shell never stamps a label on top of creator content —
+          the starter's own title lives in Content.tsx and leaves with it. */}
+      <SafeUI lifecycle={lifecycle} />
     </>
   );
 }
