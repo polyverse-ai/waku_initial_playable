@@ -21,7 +21,9 @@ This folder is a **Waku playable**: a self-contained, phone-first interactive pi
 
 ```bash
 wakukit publish --name "<name>" --site-dir ./public --source-dir . --visibility private   # also writes .waku/project.json
-wakukit promote "<name>"                               # your first release — still private, only you can open it
+wakukit promote                                        # no argument inside this folder: it reads .waku/project.json
+                                                       # (wakukit < 0.7.69: pass the name, `wakukit promote "<name>"`)
+                                                       # your first release — still private, only you can open it
 npm run build && wakukit publish --visibility public   # run in this folder = same playable, now public
 ```
 
