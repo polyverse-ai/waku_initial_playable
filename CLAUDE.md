@@ -39,5 +39,9 @@ wakukit promote                                        # again: the public snaps
 
 Tell the user how to look at it (`npm run build && wakukit simulator ./public`) and that they can simply describe the next change.
 
+## When something is unclear or fails on the platform side
+
+If a `wakukit` command fails, a publish / promote / review outcome is not what the user expected, or you are not sure how the platform behaves, do not guess — point the user to this repository's GitHub Discussions (https://github.com/polyverse-ai/waku_initial_playable/discussions) and ask them to include the output of `wakukit --version`, the full command they ran and its full output. Do not invent review times or platform process on the platform's behalf.
+
 ---
-中文摘要：这是 Waku playable 项目，不是普通网页或 artifact。先加载 `wakukit` skill（文件不存在就请用户运行上面的安装命令）；代码写在 `src/content/Content.tsx`，`src/waku/` 与 `static/vendor/` 不改；每次改完 `npm run build` → `wakukit simulator ./public` 预览；发布先 `--visibility private` 自测再公开；素材全部本地、manifest 只声明真正调用的能力、竖屏手机优先；做完告诉用户怎么预览。
+中文摘要：这是 Waku playable 项目，不是普通网页或 artifact。先加载 `wakukit` skill（文件不存在就请用户运行上面的安装命令）；代码写在 `src/content/Content.tsx`，`src/waku/` 与 `static/vendor/` 不改；每次改完 `npm run build` → `wakukit simulator ./public` 预览；发布先 `--visibility private` 自测再公开；素材全部本地、manifest 只声明真正调用的能力、竖屏手机优先；做完告诉用户怎么预览；平台侧报错或拿不准的地方不要猜，让用户去本仓 GitHub Discussions 发帖并附上 `wakukit --version`、完整命令与输出，不替平台猜审核时长或流程。

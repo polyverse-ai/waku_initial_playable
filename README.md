@@ -42,6 +42,20 @@ curl -fsSL https://storage.googleapis.com/polyverse-wakukit-releases/install-wak
 Then just say what you want to make — "make a balloon-popping game" is enough;
 the assistant does not need the platform explained.
 
+## Need help? / 求助
+
+Post in this repository's GitHub Discussions: <https://github.com/polyverse-ai/waku_initial_playable/discussions>.
+Include the output of `wakukit --version`, the full command you ran together
+with its full output, and your operating system. Section 7 of the getting-started
+guide covers the common failures, so check it first —
+[中文](https://storage.googleapis.com/polyverse-wakukit-releases/docs/wakukit-getting-started.zh.md) /
+[English](https://storage.googleapis.com/polyverse-wakukit-releases/docs/wakukit-getting-started.en.md).
+
+有问题就到本仓的 GitHub Discussions 发帖：<https://github.com/polyverse-ai/waku_initial_playable/discussions>。
+帖子里附上 `wakukit --version` 的输出、你运行的完整命令与完整输出、以及你的系统。
+常见卡点先看新手入门指南第 7 节——[中文](https://storage.googleapis.com/polyverse-wakukit-releases/docs/wakukit-getting-started.zh.md) /
+[English](https://storage.googleapis.com/polyverse-wakukit-releases/docs/wakukit-getting-started.en.md)。
+
 ## Layout
 
 | Path                 | What it is                                                                                                                  |
