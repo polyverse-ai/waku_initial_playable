@@ -9,6 +9,19 @@ Start from this template, replace the content surface, and ship.
 
 ## Quick start
 
+The shortest path is one command (`wakukit` 0.7.73 or newer; installing it is
+covered in [Working with an AI assistant](#working-with-an-ai-assistant)):
+
+```bash
+wakukit start .               # inside a clone of this repo
+wakukit start ./my-playable   # a new or empty folder: fetches this template into it first
+```
+
+`start` runs four steps — fetch the starter, `npm install`, `npm run build`, open
+the build in a local phone-shaped preview — and skips what is already there: the
+fetch when the folder already holds a project (a `package.json`), the install
+when `node_modules/` exists. Step by step, plus the checks to run while you work:
+
 ```bash
 npm ci        # install exactly the locked dependencies
 npm run dev   # local dev server with hot reload
@@ -26,6 +39,11 @@ viewport and fails on objectively broken results (white screen, collapsed
 layout, zero-size canvas, uncaught page errors, a stuck state machine). It needs
 [Playwright](https://playwright.dev) installed; if Playwright is not available
 it skips that stage and exits cleanly rather than failing.
+
+In the day-to-day loop, `npm run build` then `wakukit simulator ./public` shows
+the build in the local phone-shaped host. If `public/` is missing, `simulator`
+runs `npm run build` for you first; an existing `public/` is served as-is, so
+rebuild after every change.
 
 ## Working with an AI assistant
 
