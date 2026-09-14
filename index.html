@@ -324,9 +324,34 @@
       "sdk": "pv.media.capture(input)"
     },
     {
+      "id": "media.audio.pick",
+      "useWhen": "Let the player pick an existing audio file from their library through the host permission flow (reuse a recording instead of recording a new one).",
+      "sdk": "pv.media.pickAudio(input)"
+    },
+    {
       "id": "media.microphone.record",
       "useWhen": "Record audio with the microphone through the host permission flow.",
       "sdk": "pv.media.recordAudio(input)"
+    },
+    {
+      "id": "memory.write",
+      "useWhen": "Submit a text or image memory to the player's cross-content memory library. Write-only: content can never read or enumerate memories. Host support is iOS-only in v1 (memories stay on the player's device); other hosts reject with invalid_request, so treat saving as an enhancement and never block core play on it.",
+      "sdk": "pv.memory.save(\"some text\") / pv.memory.save({ content, mediaType, tags })"
+    },
+    {
+      "id": "realtime.tts",
+      "useWhen": "Open a streaming text-to-speech session so speech starts playing before the full utterance is generated. Must be called inside a user gesture (the AudioContext is built synchronously there).",
+      "sdk": "pv.speech.stream({ profileId, autoplay })"
+    },
+    {
+      "id": "realtime.image",
+      "useWhen": "Open a streaming image session so the picture updates while the player keeps editing the prompt. Must be called inside a user gesture.",
+      "sdk": "pv.image.stream({ profileId })"
+    },
+    {
+      "id": "realtime.voice",
+      "useWhen": "Open a duplex realtime voice conversation. With mic: true the SDK handles capture and PCM16 upstream; the host owns the permission prompt. Must be called inside a user gesture.",
+      "sdk": "pv.voice.connect({ profileId, mic })"
     },
     {
       "id": "project.publish.request",
